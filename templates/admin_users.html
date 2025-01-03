@@ -1,0 +1,109 @@
+{% extends 'template.html' %}
+
+{% block head %}
+    Admin - Manage Users
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="h3 mb-3 font-weight-normal" style="color:white">
+        Manage Users
+    </h1>
+    <br>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <a href="{{ url_for('add_user') }}" class="btn btn-primary mb-3">Add New User</a>
+
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Is Admin</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr id="row-{{ user.id }}">
+                <td>{{ user.id }}</td>
+                <td>
+                    <input type="text" name="username" value="{{ user.username }}" class="form-control form-control-sm"
+                           disabled id="username-{{ user.id }}">
+                </td>
+                <td>
+                    <input type="password" name="password" placeholder="********" class="form-control form-control-sm"
+                           disabled id="password-{{ user.id }}">
+                    <small class="text-muted">Leave blank to keep the current password.</small>
+                </td>
+                <td>
+                    <select name="is_admin" class="form-control form-control-sm" disabled id="is_admin-{{ user.id }}">
+                        <option value="True" {% if user.is_admin %}selected{% endif %}>Yes</option>
+                        <option value="False" {% if not user.is_admin %}selected{% endif %}>No</option>
+                    </select>
+                </td>
+                <td>
+                    <button class="btn btn-warning btn-sm" onclick="enableEdit({{ user.id }})" id="edit-btn-{{ user.id }}">Edit</button>
+                    <button class="btn btn-success btn-sm d-none" onclick="saveEdit({{ user.id }})" id="save-btn-{{ user.id }}">Save</button>
+                    <form method="POST" action="{{ url_for('admin_users') }}" style="display:inline;">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary mt-3">Back to Dashboard</a>
+</div>
+
+<script>
+    // Enable edit mode for a row
+    function enableEdit(userId) {
+        document.getElementById(`username-${userId}`).disabled = false;
+        document.getElementById(`password-${userId}`).disabled = false;
+        document.getElementById(`is_admin-${userId}`).disabled = false;
+
+        document.getElementById(`edit-btn-${userId}`).classList.add('d-none');
+        document.getElementById(`save-btn-${userId}`).classList.remove('d-none');
+    }
+
+    // Save the edited user
+    function saveEdit(userId) {
+        const username = document.getElementById(`username-${userId}`).value;
+        const password = document.getElementById(`password-${userId}`).value;
+        const isAdmin = document.getElementById(`is_admin-${userId}`).value;
+
+        // Create a form and submit via POST
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{{ url_for('admin_users') }}";
+
+        form.innerHTML = `
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="user_id" value="${userId}">
+            <input type="hidden" name="username" value="${username}">
+            <input type="hidden" name="password" value="${password}">
+            <input type="hidden" name="is_admin" value="${isAdmin}">
+        `;
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+{% endblock %}

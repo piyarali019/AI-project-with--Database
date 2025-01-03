@@ -1,0 +1,44 @@
+---README---
+
+This Application is designed for educational purposes as form of a project submitted to IITM designed by HRITHICK SUNDAR J - 21f1000194
+
+The stylings and css used here are license free and is obtained from bootstrap templates that are available online.
+
+Make sure the following prerequesites are installed before running the Application.
+
+Required:
+-flask_sqlalchemy
+-flask_login
+-flask_restful
+-flask_wtf
+
+-wtforms[*ONLY if asked*] 
+
+To run:
+-After installation of the above packages, RUN "flashcard.py" FILE TO RUN THE APPLICATION
+-flashcard.py has all the routes
+-model.py has the database and app initialisation with database classes
+-forms.py has the Flaskforms implemented
+-api.py has the API structure
+
+Server:
+-The app is served on port 8000, host 0.0.0.0
+
+Installation and run cmd:
+pip install Flask-SQLAlchemy
+pip install flask_login
+pip install flask_restful
+pip install flask_wtf
+python3 flashcard.py
+
+Testing:
+-The testing data is already loaded into the database file "database.sqlite3"
+DATA:
+-Username: hrithick@me
+-Password: sundar2002
+--Decks: Nation, Tamil
+--Cards:  Nation: India, France, Srilanka
+	  Tamil: ஆங்கிலம், பூனை, செயலி
+	  
+For further details contact: 21f1000194@student.onlinedegree.iitm.ac.in
+

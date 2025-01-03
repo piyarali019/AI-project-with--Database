@@ -1,0 +1,50 @@
+{% extends 'template.html' %}
+
+{% block head %}
+    Admin Dashboard
+{% endblock %}
+
+{% block body %}
+<body class="text-center">
+    <div class="container">
+        <h1 class="h3 mb-3 font-weight-normal" style="color:orange">
+            Welcome to the Admin Dashboard
+        </h1>
+        <br>
+
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Manage Users</h5>
+                        <p class="card-text">Create, view, and delete users.</p>
+                        <a href="{{ url_for('admin_users') }}" class="btn btn-primary">Manage Users</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">View Analytics</h5>
+                        <p class="card-text">Monitor user progress and test results.</p>
+                        <a href="{{ url_for('admin_analytics') }}" class="btn btn-primary">View Analytics</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <a href="{{ url_for('logout_page') }}" class="btn btn-lg btn-danger">Logout</a>
+    </div>
+</body>
+
+<!-- Add your JavaScript here -->
+<script>
+  document.querySelectorAll('form').forEach(form => {
+      form.addEventListener('submit', (e) => {
+          if (!confirm('Are you sure you want to delete this user?')) {
+              e.preventDefault();
+          }
+      });
+  });
+</script>
+{% endblock %}

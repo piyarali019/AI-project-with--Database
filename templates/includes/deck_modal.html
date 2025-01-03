@@ -1,0 +1,54 @@
+<style>
+  .modal-content {
+    background-color: #212121
+  }
+</style>
+
+<div class="modal fade" id="Modal-Edit-{{ item.deck_id }}"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="DeckEdit">
+          {{ item.name }}
+        </h5>
+        <button type="button" class="close"
+                data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+            {{form.hidden_tag()}}
+            <h4 class="text-center">
+              Edit {{ item.name }}?
+            </h4>
+            <br>
+            <h6 class="text-center">
+                <br>
+                {{ form.new_name.label() }}
+                {{ form.new_name(placeholder="New Name") }}
+                <br>
+                {{ form.new_rate.label() }}
+                {{ form.new_rate(placeholder="New Review") }}
+                <br><br>
+            </h6>
+            <input id="edit" name="edit" type="hidden" value="{{item.deck_id}}">
+            {{ form.edit(class="btn btn-lg btn-success")}}
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                data-dismiss="modal">Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+

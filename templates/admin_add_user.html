@@ -1,0 +1,25 @@
+{% extends 'template.html' %}
+
+{% block head %}
+    Add New User
+{% endblock %}
+
+{% block body %}
+<body class="text-center">
+    <div class="container">
+        <h1 class="h3 mb-3 font-weight-normal">Add New User</h1>
+
+        <form method="POST" class="form-register" style="...">
+            {{ form.hidden_tag() }}
+            <br>
+            {{ form.username.label }}
+            {{ form.username(placeholder="Enter username") }}
+            <br><br>
+            {{ form.password.label }}
+            {{ form.password(placeholder="Enter password") }}
+            <br><br>
+            {{ form.submit(class="btn btn-lg btn-primary") }}
+        </form>
+    </div>
+</body>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'template.html' %}
+
+{% block head %}
+  {{ user | upper }}
+{% endblock %}
+
+{% block body %}
+<br>
+<body class="text-center">
+    <div class="container" style="min-height: 100vh;">
+        <!-- Heading -->
+        <h1 class="h2 mb-3 font-weight-normal" style="color:yellow">
+            Welcome to Quiz Test
+        </h1>
+
+        <!-- Check if user has a score -->
+        {% if current_user.score is not none %}
+            <!-- Display the score in a card if it exists -->
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card bg-dark text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Test Score</h5>
+                            <p class="card-text">You completed the test! Your score is:</p>
+                            <div class="alert alert-success" role="alert">
+                                <h4 class="alert-heading">Score: {{ current_user.score }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <!-- Row for Card to start the test if no score exists -->
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card bg-dark text-white">
+                        <div class="card-body">
+                            <h4 class="card-title">Python Test</h4>
+                            <p class="card-text">Read All Questions Carefully Before Answering</p>
+                            <!-- Button to start test -->
+                            <a href="{{ url_for('start_test') }}" class="btn btn-primary btn-block">Start Test</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</body>
+{% endblock %}

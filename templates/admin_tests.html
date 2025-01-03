@@ -1,0 +1,50 @@
+{% extends 'template.html' %}
+
+{% block head %}
+    Admin - Manage Tests
+{% endblock %}
+
+{% block body %}
+<body class="text-center">
+    <div class="container">
+        <h1 class="h3 mb-3 font-weight-normal" style="color:white">
+            Manage Tests
+        </h1>
+
+        <br>
+
+        <div class="row">
+            <div class="col-md-6">
+                <form method="POST" action="{{ url_for('admin_tests') }}">
+                    <h5 class="card-title">Add New Test</h5>
+                    <input type="text" name="test_name" class="form-control" placeholder="Test Name" required>
+                    <br>
+                    <button type="submit" class="btn btn-primary"> Add Test </button>
+                </form>
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <h5 class="card-title">Existing Tests</h5>
+                {% if tests %}
+                    <ul class="list-group">
+                        {% for test in tests %}
+                            <li class="list-group-item">
+                                {{ test.name }}
+                                <a href="{{ url_for('delete_test', test_id=test.id) }}" class="btn btn-danger btn-sm float-right ml-2">Delete</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No tests available.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <br>
+        <a href="{{ url_for('logout_page') }}" class="btn btn-lg btn-danger">Logout</a>
+    </div>
+</body>
+{% endblock %}

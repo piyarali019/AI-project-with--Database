@@ -1,0 +1,45 @@
+{% extends 'template.html' %}
+{% block head %}
+    Manage Decks
+{% endblock %}
+
+{% block body %}
+<body class="text-center">
+    <div class="container">
+        <h1 class="h3 mb-3 font-weight-normal" style="color:white">
+            Manage Decks
+        </h1>
+        <br>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>Deck ID</th>
+                    <th>Deck Name</th>
+                    <th>Created By (User ID)</th>
+                    <th>Rate</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for deck in decks %}
+                <tr>
+                    <td>{{ deck.deck_id }}</td>
+                    <td>{{ deck.name }}</td>
+                    <td>{{ deck.user_id }}</td>
+                    <td>{{ deck.deck_rate }}</td>
+                    <td>
+                        <!-- Delete deck -->
+                        <form method="POST" style="display:inline;">
+                            <input type="hidden" name="delete_deck" value="{{ deck.deck_id }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-primary"> Back to Dashboard </a>
+    </div>
+</body>
+{% endblock %}

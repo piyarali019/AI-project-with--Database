@@ -1,0 +1,27 @@
+{% extends 'template.html' %}
+{% block head %}
+    Create Decks
+{% endblock %}
+
+{% block body %}
+<body class="text-center">
+    <div class="container">
+        <form method="POST" class="form-register" style="color:white">
+            {{ form.hidden_tag() }}
+            <br>
+            <h1 class="h3 mb-3 font-weight-normal">  Add Cards  </h1>
+            <br>
+            {{ form.name.label() }}
+            {{ form.name(placeholder="Card Question") }}
+            <br>
+            {{ form.data.label() }}
+            {{ form.data(placeholder="Card Answer") }}
+            <br>
+            {{ form.card_rate.label() }}
+            {{ form.card_rate(placeholder="Card Difficulty") }}
+            <br><br>
+            {{ form.submit(class="btn btn-lg btn-primary") }}
+        </form>
+    </div>
+</body>
+{% endblock %}

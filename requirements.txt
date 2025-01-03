@@ -1,0 +1,5 @@
+pip install Flask-SQLAlchemy
+pip install flask_login
+pip install flask_restful
+pip install flask_wtf
+python3 flashcard.py

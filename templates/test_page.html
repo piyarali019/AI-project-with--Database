@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQ Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2e3b4e;
+            color: white;
+            padding-top: 50px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #1d262e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .quiz-header h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .quiz-container {
+            background: #354a5f;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .timer {
+            font-size: 18px;
+            color: #4c9be5;
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .options li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #4e5d69;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .options li:hover {
+            background: #3c4a57;
+            cursor: pointer;
+        }
+
+        .btn {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 30px;
+            font-size: 22px;
+            color: #f0c419;
+            text-align: center;
+        }
+
+        .back-to-dashboard {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-to-dashboard a {
+            color: #f1f1f1;
+            font-size: 18px;
+            text-decoration: none;
+            border: 2px solid #f1f1f1;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .back-to-dashboard a:hover {
+            background-color: #f1f1f1;
+            color: #1d262e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="quiz-header">
+            <h1>FLASHCARDS QUIZ APP</h1>
+            <div id="timer" class="timer">Time left: <span id="time-left">15</span> seconds</div>
+            <div id="questions-left" class="timer">Questions left: 0</div> <!-- This shows how many questions are left -->
+        </div>
+
+        <div class="quiz-container" id="quiz-container">
+            <!-- Question and options will be dynamically inserted here -->
+        </div>
+
+        <button id="submit" class="btn">Next Question</button>
+        <div id="result" class="result"></div>
+
+        <div class="back-to-dashboard" id="back-to-dashboard" style="display: none;">
+            <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+        </div>
+    </div>
+
+<script>
+  async function fetchQuiz() {
+    const response = await fetch('/get_quiz');
+    return response.json();
+  }
+
+  async function submitScore(username, score) {
+    const resultData = {
+      username: username,  // Replace with the actual username
+      score: score
+    };
+
+    const response = await fetch('/update_score', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(resultData)
+    });
+
+    const data = await response.json();
+    if (data.status === 'success') {
+      console.log('Score updated successfully!');
+    } else {
+      console.error('Error updating score');
+    }
+  }
+
+  async function startQuiz() {
+    const quizData = await fetchQuiz();
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    const quizContainer = document.getElementById('quiz-container');
+    const submitButton = document.getElementById('submit');
+    const timeLeftElement = document.getElementById('time-left');
+    const questionsLeftElement = document.getElementById('questions-left');
+    let timerInterval = null;
+
+    // Function to start the timer for each question
+    function startQuestionTimer(timeLeft) {
+      timeLeftElement.textContent = timeLeft;
+
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timeLeftElement.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          moveToNextQuestion();
+        }
+      }, 1000);
+    }
+
+    // Function to load the current question
+    function loadQuestion() {
+      if (currentQuestionIndex >= quizData.length) {
+        showFinalScore();
+        return;
+      }
+
+      const currentQuestion = quizData[currentQuestionIndex];
+      quizContainer.innerHTML = `
+        <div class="question">${currentQuestion.question}</div>
+        <ul class="options">
+          ${currentQuestion.options
+            .map((option, index) => `
+              <li>
+                <label>
+                  <input type="radio" name="answer" value="${index}">
+                  ${option}
+                </label>
+              </li>
+            `)
+            .join('')}
+        </ul>
+      `;
+
+      questionsLeftElement.textContent = `Questions left: ${quizData.length - currentQuestionIndex}`;
+
+      startQuestionTimer(15);
+      submitButton.style.display = 'inline';  // Show the "Next Question" button
+    }
+
+    // Function to get the selected answer
+    function getSelectedAnswer() {
+      const answers = document.querySelectorAll('input[name="answer"]');
+      let selectedValue = null;
+      answers.forEach(answer => {
+        if (answer.checked) {
+          selectedValue = parseInt(answer.value);
+        }
+      });
+      return selectedValue;
+    }
+
+    // Function to move to the next question after time runs out or submit button is clicked
+    function moveToNextQuestion() {
+      const selectedAnswer = getSelectedAnswer();
+
+      if (selectedAnswer !== null && selectedAnswer === quizData[currentQuestionIndex].correct) {
+        score++;
+      }
+
+      currentQuestionIndex++;
+
+      // Hide the submit button and show the final score if the quiz is over
+      if (currentQuestionIndex >= quizData.length) {
+        submitButton.style.display = 'none';
+        showFinalScore();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    // Function to show the final score
+    function showFinalScore() {
+      quizContainer.innerHTML = `Quiz over! You scored <span>${score}</span> out of ${quizData.length}.`;
+
+      // Show the "Back to Dashboard" link after the quiz is finished
+      document.getElementById('back-to-dashboard').style.display = 'block';
+
+      // Update the score in the database
+      const username = 'JohnDoe';  // Replace with the actual logged-in username
+      submitScore(username, score);
+    }
+
+    // Event listener for the "Next Question" button
+    submitButton.addEventListener('click', () => {
+      moveToNextQuestion();
+    });
+
+    // Start the quiz by loading the first question
+    loadQuestion();
+  }
+
+  // Start the quiz
+  startQuiz();
+</script>
+
+</body>
+</html>

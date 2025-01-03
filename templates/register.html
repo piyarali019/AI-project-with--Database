@@ -1,0 +1,167 @@
+{% extends 'template.html' %}
+
+{% block head %}
+    <title>Register Page</title>
+    <style>
+       .container-login100 {
+            width: 100%;
+            min-height: 100vh;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            z-index: 1;
+          }
+
+          .container-login100::before {
+            content: "";
+            display: block;
+            position: absolute;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(93,84,240,0.5);
+            background: -webkit-linear-gradient(left, rgba(0,168,255,0.5), rgba(185,0,255,0.5));
+            background: -o-linear-gradient(left, rgba(0,168,255,0.5), rgba(185,0,255,0.5));
+            background: -moz-linear-gradient(left, rgba(0,168,255,0.5), rgba(185,0,255,0.5));
+            background: linear-gradient(left, rgba(0,168,255,0.5), rgba(185,0,255,0.5));
+            pointer-events: none;
+
+          }
+
+        /* Centered Card */
+        .sign-in-card {
+            display: grid;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 350px; /* Larger width */
+            padding: 50px 30px;
+            text-align: center;
+            height: 570px; /* Increased height */
+            width: 340px;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+
+             box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+            -moz-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+            -webkit-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+            -o-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+            -ms-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Heading Style */
+        .login100-form-title {
+            display: block;
+            font-family: SourceSansPro-Bold;
+            font-size: 30px;
+            color: #4b2354;
+            line-height: 1.2;
+            text-align: center;
+            margin-bottom: -41px;
+        }
+
+        /* Input Fields */
+        .form-control {
+            border: none;
+            background-color: #f5f5f5;
+            border-radius: 30px;
+            padding: 33px 20px;
+            font-size: 1rem;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: none;
+            border: 2px solid #A85FFF;
+        }
+
+        /* Sign In Button */
+        .btn-signin {
+            background: linear-gradient(to right, #C847FF, #A127FF);
+            color: white;
+            font-size: 1rem;
+            border-radius: 30px;
+            padding: 12px;
+            border: none;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(168, 39, 255, 0.3);
+        }
+
+        .btn-signin:hover {
+            background: #A127FF;
+            color: white;
+        }
+
+        /* Social Icons */
+        .social-icons img {
+            width: 40px;
+            margin: 10px 5px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .social-icons img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Footer Link */
+        .footer-link a {
+            text-decoration: none;
+            color: #A127FF;
+            font-weight: bold;
+
+        }
+
+        .footer-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<body>
+    <!-- Background Container -->
+    <div class="container-login100">
+        <!-- Sign-Up Card -->
+        <div class="sign-in-card">
+            <!-- Title -->
+            <span class="login100-form-title p-b-37">
+                Create an Account
+            </span>
+
+            <!-- Form Section -->
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <!-- Username Field -->
+                {{ form.username(class="form-control", placeholder="Username") }}
+                <!-- Password Field -->
+                {{ form.password(class="form-control", placeholder="Password") }}
+                <!-- Confirm Password Field -->
+                <!-- Sign Up Button -->
+                {{ form.submit(class="btn btn-signin mt-2") }}
+            </form>
+
+            <!-- Login Link -->
+            <div class="footer-link mt-4">
+                <a href="{{ url_for('login_page') }}">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

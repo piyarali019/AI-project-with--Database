@@ -1,0 +1,40 @@
+{% extends 'template.html' %}
+{% block head %}
+    {{user}}'s Cardboard
+{% endblock %}
+
+{% block body %}
+<br>
+<body class="text-center">
+    <div class="container">
+        <h3><button class="btn btn-lg btn-primary"><a style="color:white" href="/play/{{d_id}}">Start Deck</a></button></h3>
+    </div><br>
+    <button class="btn btn-lg btn-primary"><a style="color:white" href="/addcard/{{d_id}}">Add Cards</a></button>
+    </div><br><br>
+    <div>
+              <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Review</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            {% include 'includes/card_modal.html' %}
+                <tr>
+                    <td>{{ item.card_id }}</td>
+                    <td>{{ item.front }}</td>
+                    <td>{{ item.card_rate }}</td>
+                    <td>
+                        <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#Card-Edit-{{ item.card_id }}">Edit Card</button>
+                        <button class="btn btn-outline btn-success"><a style="color:white" href="/deletecard/{{ d_id }}/{{item.card_id}}">Delete Card</a></button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</body>
+{% endblock %}
